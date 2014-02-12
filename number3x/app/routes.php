@@ -40,7 +40,30 @@ Route::post('save', function()
 
 Route::get('autocomplete', function()
 {
+    $return_arr = [];
     $term = Input::get('term');
-    $return_arr = ['yyy','xxx'];
+    $terms = DB::table('ingredients')->select('name')->where('name', 'like', '%'.$term.'%')->orderBy('popularity', 'desc')->take(10)->remember(5)->get();
+    foreach ($terms as $t) {
+        $return_arr[] = $t->name;
+    }
     return json_encode($return_arr);
 });
+
+Route::get('admin/ingredient', function()
+{
+    return View::make('ingredient');
+});
+
+Route::post('admin/ingredient/edit', function()
+{
+    $name = Input::get('name');
+    $ingredient = Ingredient::where('name', $name)->first();
+    return View::make('edit')->with('ingredient', $ingredient);
+});
+
+Route::post('admin/ingredient', array('as' => 'ingredientudpate', function()
+{
+    DB::table('ingredients')->where('id',Input::get('id'))->update(['name'=>Input::get('name'), 'popularity'=>Input::get('popularity')]);
+    Session::flash('success', 'Successfully stored in database!');
+    return Redirect::to('admin/ingredient');
+}));
