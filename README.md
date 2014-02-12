@@ -24,6 +24,12 @@ In the commandline: `php number2.php 3,2,3,4,3,6 3` will output **3**
 
 Filename: `number3x/*`
 
+Uses Laravel 4.1
+
+Admin panel for editing the ingredients `/admin/ingredient`
+
+Also included my db export `number3.sql` with populated fields
+
 * * *
 
 ## Problem 4
